@@ -57,7 +57,7 @@ class CategoryTile extends StatelessWidget {
               // Prefer to use the literal syntax, i.e. `[]`, instead of `List()`.
               // You can add the type argument if you'd like, i.e. <Widget>[].
               // See https://www.dartlang.org/guides/language/effective-dart/usage#do-use-collection-literals-when-possible
-              children: [
+              children: <Widget>[
                 Padding(
                   padding: EdgeInsets.all(16.0),
                   child: Icon(
