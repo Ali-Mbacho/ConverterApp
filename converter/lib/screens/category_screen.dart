@@ -8,6 +8,7 @@ import '../screens/categoryTile.dart';
 import '../wiggets/category.dart';
 import '../wiggets/backdrop.dart';
 import '../screens/unit_converter.dart';
+import '../services/api.dart';
 
 /// Category Route (screen).
 ///
@@ -63,6 +64,17 @@ class _CategoryScreenState extends State<CategoryScreen> {
     }),
   ];
 
+  static const _icons = <String>[
+    'assets/icons/length.png',
+    'assets/icons/area.png',
+    'assets/icons/volume.png',
+    'assets/icons/mass.png',
+    'assets/icons/time.png',
+    'assets/icons/digital_storage.png',
+    'assets/icons/power.png',
+    'assets/icons/currency.png',
+  ];
+
   @override
   Future<void> didChangeDependencies() async {
     super.didChangeDependencies();
@@ -70,6 +82,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
     // assets/data/regular_units.json
     if (_categories.isEmpty) {
       await _retrieveLocalCategories();
+      await _retrieveApiCategory();
     }
   }
 
@@ -90,7 +103,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
         name: key,
         units: units,
         color: _baseColors[categoryIndex],
-        iconLocation: Icons.cake,
+        iconLocation: _icons[categoryIndex],
       );
       setState(() {
         if (categoryIndex == 0) {
@@ -102,7 +115,39 @@ class _CategoryScreenState extends State<CategoryScreen> {
     });
   }
 
-  /// Function to call when a [Category] is tapped.
+  // Retrieves a [Category] and its [Unit]s from an API on the web
+  Future<void> _retrieveApiCategory() async {
+    //placeholder  while we fetch the currency category using the APi
+    setState(() {
+      _categories.add(Category(
+        name: apiCategory['name'],
+        units: [],
+        color: _baseColors.last,
+        iconLocation: _icons.last,
+      ));
+    });
+    final api = Api();
+    final jsonUnits = await api.getUnits(apiCategory['route']);
+    // If the API errors out or we have no internet connection, this category
+    // remains in placeholder mode (disabled)
+    if (jsonUnits != null) {
+      final units = <Unit>[];
+      for (var unit in jsonUnits) {
+        units.add(Unit.fromJson(unit));
+      }
+      setState(() {
+        _categories.removeLast();
+        _categories.add(Category(
+          name: apiCategory['name'],
+          units: units,
+          color: _baseColors.last,
+          iconLocation: _icons.last,
+        ));
+      });
+    }
+  }
+
+  // Function to call when a [Category] is tapped.
   void _onCategoryTap(Category category) {
     setState(() {
       _currentCategory = category;
@@ -116,8 +161,14 @@ class _CategoryScreenState extends State<CategoryScreen> {
     if (deviceOrientation == Orientation.portrait) {
       return ListView.builder(
         itemBuilder: (BuildContext context, int index) {
+          var _category = _categories[index];
           return CategoryTile(
-              category: _categories[index], onTap: _onCategoryTap);
+            category: _category,
+            onTap:
+                _category.name == apiCategory['name'] && _category.units.isEmpty
+                    ? null
+                    : _onCategoryTap,
+          );
         },
         itemCount: _categories.length,
       );

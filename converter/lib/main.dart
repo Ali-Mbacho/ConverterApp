@@ -1,5 +1,5 @@
 import 'package:converter/screens/category_screen.dart';
-//import 'package:converter/wiggets/category.dart';
+
 import 'package:flutter/material.dart';
 
 //importing this screen to view only
@@ -14,6 +14,7 @@ class UnitConverter extends StatelessWidget {
       //color: Colors.white,
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
+        fontFamily: 'Raleway',
         textTheme: Theme.of(context).textTheme.apply(
               bodyColor: Colors.black,
               displayColor: Colors.grey[600],

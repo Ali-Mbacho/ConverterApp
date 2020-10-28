@@ -21,9 +21,8 @@ class CategoryTile extends StatelessWidget {
   const CategoryTile({
     Key key,
     @required this.category,
-    @required this.onTap,
+    this.onTap,
   })  : assert(category != null),
-        assert(onTap != null),
         super(key: key);
 
   /// Navigates to the [UnitConverter].
@@ -38,7 +37,8 @@ class CategoryTile extends StatelessWidget {
   // See https://docs.flutter.io/flutter/material/Theme-class.html
   Widget build(BuildContext context) {
     return Material(
-      color: Colors.transparent,
+      color:
+          onTap == null ? Color.fromRGBO(50, 50, 50, 02) : Colors.transparent,
       child: Container(
         height: _rowHeight,
         child: InkWell(
@@ -60,9 +60,8 @@ class CategoryTile extends StatelessWidget {
               children: <Widget>[
                 Padding(
                   padding: EdgeInsets.all(16.0),
-                  child: Icon(
+                  child: Image.asset(
                     category.iconLocation,
-                    size: 60.0,
                   ),
                 ),
                 Center(

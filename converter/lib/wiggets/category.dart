@@ -1,4 +1,5 @@
-import 'package:converter/models/unit.dart';
+import '../models/unit.dart';
+
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 
@@ -7,7 +8,7 @@ class Category {
   final String name;
   final ColorSwatch color;
   final List<Unit> units;
-  final IconData iconLocation;
+  final String iconLocation;
 
   /// Information about a [Category].
   ///
