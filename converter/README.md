@@ -1,6 +1,6 @@
 # converter
 
-A new Flutter project.
+This is a simple convetor made by flutter.
 
 ## Getting Started
 
